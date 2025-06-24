@@ -12,8 +12,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db=SQLAlchemy(app)
 
-with app.app_context():
-    db.create_all()
+
 
 
 #defining schema
@@ -29,7 +28,8 @@ class Todo(db.Model):
 
 
 
-
+with app.app_context():
+    db.create_all()
 
 @app.route("/", methods=["POST", "GET"])
 def renderPage():
