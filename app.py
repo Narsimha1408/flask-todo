@@ -2,12 +2,12 @@ from datetime import timezone, datetime
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 import pdb
+import os
 
-
-app=Flask(__name__)
+app=Flask(__name__, instance_relative_config=True)
 
 # configuring DB
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///todoapp.db'
+app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///' + os.path.join(app.instance_path, 'todoapp.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db=SQLAlchemy(app)
 
