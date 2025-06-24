@@ -1,6 +1,7 @@
 from datetime import timezone, datetime
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+import pdb
 
 
 app=Flask(__name__)
@@ -47,10 +48,30 @@ def renderPage():
 
 @app.route("/delete/<int:sno>")
 def deleting(sno):
+    # pdb.set_trace()
     deleted_todo=Todo.query.get_or_404(sno)
     db.session.delete(deleted_todo)
     db.session.commit()
     return redirect("/")
+
+@app.route("/update/<int:sno>", methods=["POST", "GET"])
+def updating(sno):
+    if request.method == "POST":
+        title = request.form.get("title")
+        description =request.form.get("description")
+        updated_todo = Todo.query.get_or_404(sno)
+        updated_todo.title = title
+        updated_todo.description = description
+        #to add and commit the changes to db
+        db.session.add(updated_todo)
+        db.session.commit()
+        return redirect("/")
+
+    
+    updated_todo = Todo.query.get_or_404(sno)
+    return render_template("update.html", updated_todo=updated_todo)
+
+
 
 
 if __name__== "__main__":
